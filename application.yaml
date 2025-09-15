@@ -1,0 +1,97 @@
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include: 'health'
+  endpoint:
+    info:
+      enabled: true
+    metrics:
+      enabled: true
+    health:
+      enabled: true
+      probes:
+        enabled: true
+      group:
+        liveness:
+          include:
+            - livenessState
+            - readinessState
+    prometheus:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+spring:
+  main:
+    allow-circular-references: true
+  flyway:
+    enabled: false
+    baselineOnMigrate: true
+    fail-on-missing-locations: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/hapi_fhir
+    username: hapi_user
+    password: MiPasswordSeguro
+    driverClassName: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+  jpa:
+    properties:
+      hibernate.format_sql: false
+      hibernate.show_sql: false
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+      hibernate.search.enabled: false
+
+
+hapi:
+  fhir:
+    fhir_version: R4
+    openapi_enabled: true
+    ig_runtime_upload_enabled: false
+    cors:
+      allow_credentials: true
+      allowed_origins:
+        - "*"
+    cr:
+      enabled: false
+    cdshooks:
+      enabled: false
+      clientIdHeaderName: client_id
+    search-coord-core-pool-size: 20
+    search-coord-max-pool-size: 100
+    search-coord-queue-capacity: 200
+    search_prefetch_thresholds:
+      - 13
+      - 503
+      - 2003
+      - -1
+    tester:
+      home:
+        name: Local Tester
+        server_address: 'http://localhost:8080/fhir'
+        refuse_to_fetch_third_party_urls: false
+        fhir_version: R4
+      global:
+        name: Global Tester
+        server_address: "http://hapi.fhir.org/baseR4"
+        refuse_to_fetch_third_party_urls: false
+        fhir_version: R4
+    inline_resource_storage_below_size: 4000
+    narrative_enabled: false
+    mdm_enabled: false
+    mdm_rules_json_location: "mdm-rules.json"
+    bulk_export_enabled: true
+    bulk_import_enabled: true
+    max_export_bundle_size: 50000000
+    bundle_batch_pool_size: 20
+    bundle_batch_pool_max_size: 50
+    bulkdata:
+      storage-path: /home/linuxfhir/fhir-bulkdata
+      max-concurrent-exports: 5
+      async-job-cache-expiration-ms: 300000
+
+        
